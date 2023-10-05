@@ -1,0 +1,20 @@
+mlaunch --replicaset --nodes 5
+
+db.adminCommand({
+  "setDefaultRWConcern" : 1,
+  "defaultWriteConcern" : {
+    "w" : 4,
+    wtimeout: 200
+  }
+})
+
+
+db.adminCommand({
+  "setDefaultRWConcern" : 1,
+  "defaultWriteConcern" : { "w":"majority" }
+})
+
+
+db.getReplicationInfo()
+db.printReplicationInfo()
+db.adminCommand({ replSetGetStatus: 1})
