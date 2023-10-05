@@ -36,7 +36,7 @@ public class WriteService {
         try {
             runnable.run();
         } catch (MongoWriteConcernException ex) {
-            notifyDCO();
+            startMonitoring();
         }
         sw.stop();
         logger.info("End, Time: " + sw.getTotalTimeMillis() + "ms");
@@ -47,7 +47,7 @@ public class WriteService {
         logger.error("Aborted. Write serice unavailable.");
     }
 
-    private void notifyDCO() {
+    private void startMonitoring() {
         logger.warn("waiting for replication timed out while writing");
         replicationError = true;
     }
