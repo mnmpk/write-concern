@@ -1,8 +1,10 @@
+server:
+  port: 8081
 spring:
   data:
     mongodb:
       #uri: "mongodb+srv://admin:admin@demo.uskpz.mongodb.net/demo"
-      uri: "mongodb://localhost:27017,localhost:27018,localhost:27019,localhost:27020,localhost:27021/demo"
+      uri: "mongodb://localhost:27017,localhost:27018,localhost:27019,localhost:27020,localhost:27021/admin"
       #host: localhost
       #port: 27017
       #database: demo
@@ -17,5 +19,6 @@ logging:
             core:
               MongoTemplate: DEBUG
 app:
+  requiredNoOfHealthyNode: 4
   replicationLagThershold: 200
   interval: 10000

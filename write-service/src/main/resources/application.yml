@@ -1,0 +1,22 @@
+spring:
+  data:
+    mongodb:
+      #uri: "mongodb+srv://admin:admin@demo.uskpz.mongodb.net/demo"
+      uri: "mongodb://localhost:27017,localhost:27018,localhost:27019,localhost:27020,localhost:27021/demo"
+      #host: localhost
+      #port: 27017
+      #database: demo
+      #username: user
+      #password: password
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+app:
+  requiredNoOfHealthyNode: 4
+  replicationLagThershold: 200
+  interval: 10000

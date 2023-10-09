@@ -1,4 +1,4 @@
-package com.mongodb.javabasic;
+package com.mongodb.service;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -20,6 +20,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.connection.ServerConnectionState;
+import com.mongodb.listener.NodeStateListener;
 
 @Service
 public class MonogClientService {
@@ -84,7 +85,6 @@ public class MonogClientService {
                                     .maxSize(200)).build()
             );
         }
-
         return mongoClientMajority;
     }
 
