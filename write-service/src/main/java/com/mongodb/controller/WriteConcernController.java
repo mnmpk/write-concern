@@ -26,12 +26,10 @@ public class WriteConcernController {
     private MongoDBWriteService writeService;
 
     @GetMapping("/write")
-    public void writeConcern() throws InterruptedException {
-        MongoCollection<Document> collection = mongoClient.getDatabase("demo").getCollection("test");
-        this.writeService.setLogger(logger);
+    public void write() throws InterruptedException {
         try {
-
             this.writeService.performWrite(() -> {
+                MongoCollection<Document> collection = mongoClient.getDatabase("demo").getCollection("test");
                 Document doc = new Document().append("t", new Date());
                 logger.info(collection.insertOne(doc).toString());
             });
@@ -45,5 +43,13 @@ public class WriteConcernController {
             //        ).build();
             logger.error("Write serice unavailable.", ex);
         }
+    }
+    @GetMapping("/write-with-retry")
+    public void writeWithRetry() throws InterruptedException {
+        this.writeService.performWriteWithRetry(() -> {
+            MongoCollection<Document> collection = mongoClient.getDatabase("demo").getCollection("test");
+            Document doc = new Document().append("t", new Date());
+            logger.info(collection.insertOne(doc).toString());
+        });
     }
 }

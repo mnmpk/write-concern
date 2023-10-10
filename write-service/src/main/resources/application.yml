@@ -20,3 +20,5 @@ app:
   requiredNoOfHealthyNode: 4
   replicationLagThershold: 200
   interval: 10000
+  maxAttempts: 3
+  delay: 1000
