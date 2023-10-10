@@ -41,7 +41,7 @@ public class WriteConcernController {
             //e.g. MongoClientSettings.builder().applyToClusterSettings(builder
             //            -> builder.applySettings(ClusterSettings.builder().serverSelectionTimeout(10, TimeUnit.SECONDS).build())
             //        ).build();
-            logger.error("Write serice unavailable.", ex);
+            logger.error("Write service unavailable.", ex);
         }
     }
     @GetMapping("/write-with-retry")

@@ -93,7 +93,7 @@ public class MongoDBMonitoringService {
             }
             return map;
         } catch (MongoTimeoutException ex) {
-            logger.error("Write serice unavailable.");
+            logger.error("Write service unavailable.");
         }
         return Map.of(STATE.UNHEALTHY, 0, STATE.HEALTHY, 0);
     }

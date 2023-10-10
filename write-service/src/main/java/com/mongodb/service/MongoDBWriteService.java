@@ -72,6 +72,6 @@ public class MongoDBWriteService {
 
     @Recover
     private void abort() {
-        logger.error("Aborted. Write serice unavailable.");
+        logger.error("Aborted. Write service unavailable.");
     }
 }
