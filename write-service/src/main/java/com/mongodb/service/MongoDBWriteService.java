@@ -30,6 +30,8 @@ public class MongoDBWriteService {
     public void performWrite(Runnable runnable) {
         try {
             runnable.run();
+            if(alertOpen)
+                logger.info("Resume normal");
             alertOpen=false;
         } catch (MongoWriteConcernException ex) {
             //Notes to integrate MongoDBMonitoringService 
@@ -60,13 +62,15 @@ public class MongoDBWriteService {
     public void performWriteWithCallback(Runnable runnable, Consumer<Exception> consumer) {
         try {
             runnable.run();
+            if(alertOpen)
+                logger.info("Resume normal");
             alertOpen=false;
         } catch (MongoWriteConcernException ex) {
             //if(!mongoDBMonitoringService.isAlertOpen()){
             //    mongoDBMonitoringService.triggerAlert();
             //}
-            alertOpen=true;
             consumer.accept(ex);
+            alertOpen=true;
         }
     }
 

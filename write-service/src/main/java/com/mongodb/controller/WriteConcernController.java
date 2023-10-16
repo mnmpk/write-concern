@@ -46,7 +46,8 @@ public class WriteConcernController {
                 
                 logger.info(collection.insertOne(doc).toString());
             },(ex) -> {
-                logger.warn("write concern timeout exception for:"+doc);
+                if(!this.writeService.isAlertOpen())
+                    logger.warn("write concern timeout exception for:"+doc);
             });
         } catch (MongoTimeoutException ex) {
             //Server Selection Timeout, default value is 30s. The value can be change by adding urioption or changing client definition.
