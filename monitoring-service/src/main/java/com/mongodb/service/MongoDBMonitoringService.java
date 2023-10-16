@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -38,11 +39,11 @@ public class MongoDBMonitoringService {
     @Value("${app.independentMonitoringMode}")
     private boolean independentMonitoringMode;
 
-    @Autowired
-    private MongoClient mongoClient;
+    //@Autowired
+    //private MongoClient mongoClient;
 
-    // @Autowired
-    // private MongoTemplate mongoTemplate;
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     private enum STATE {
         HEALTHY,
@@ -70,8 +71,8 @@ public class MongoDBMonitoringService {
 
     private Map<STATE, Integer> getReplicaSetStatus() {
         try {
-            Document doc = mongoClient.getDatabase("admin").runCommand(new Document("replSetGetStatus", 1));
-            // Document doc = mongoTemplate.getDb().runCommand(new Document("replSetGetStatus", 1));
+            //Document doc = mongoClient.getDatabase("admin").runCommand(new Document("replSetGetStatus", 1));
+            Document doc = mongoTemplate.getDb().runCommand(new Document("replSetGetStatus", 1));
             List<Document> documents = doc.getList("members", Document.class);
             primaryOpTime = documents.stream().filter(m -> m.getInteger("state") == 1)
                     .map(m -> m.get("optime", Document.class).get("ts", BsonTimestamp.class)).findFirst().get()
@@ -99,7 +100,7 @@ public class MongoDBMonitoringService {
     }
 
     public void triggerAlert() {
-        logger.warn("Cluster is not healthy/Replication lag exceeds thershold");
+        logger.warn("Cluster is not healthy/Replication lag exceeds threshold");
         alertOpen = true;
     }
     public void closeAlert() {

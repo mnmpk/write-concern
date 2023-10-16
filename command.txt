@@ -18,3 +18,44 @@ db.adminCommand({
 db.getReplicationInfo()
 db.printReplicationInfo()
 db.adminCommand({ replSetGetStatus: 1})
+
+
+
+// check status
+status = rs.status().members.map(m => {
+    return {
+        name: m.name,
+        stateStr: m.stateStr
+    }
+});
+
+// reconfig replica set
+var conf = rs.conf()
+status.forEach((m, i) => {
+    if (m.stateStr != "SECONDARY") {
+        conf.members[i].priority = 0;
+        conf.members[i].votes = 0;
+    } else {
+        conf.members[i].priority = 10;
+    }
+});
+rs.reconfig(conf, {force: true});
+
+
+
+// check status
+status = rs.status().members.map(m => {
+    return {
+        name: m.name,
+        stateStr: m.stateStr
+    }
+});
+
+// reconfig replica set
+var conf = rs.conf()
+status.forEach((m, i) => {
+    
+        conf.members[i].priority = 1;
+        conf.members[i].votes = 1;
+});
+rs.reconfig(conf, {force: true});

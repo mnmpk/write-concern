@@ -25,13 +25,28 @@ public class WriteConcernController {
     @Autowired
     private MongoDBWriteService writeService;
 
-    @GetMapping("/write")
+    @GetMapping("/write-without-callback")
     public void write() throws InterruptedException {
         try {
             this.writeService.performWrite(() -> {
                 MongoCollection<Document> collection = mongoClient.getDatabase("demo").getCollection("test");
                 Document doc = new Document().append("t", new Date());
                 logger.info(collection.insertOne(doc).toString());
+            });
+        } catch (MongoTimeoutException ex) {
+            logger.error("Write service unavailable.", ex);
+        }
+    }
+    @GetMapping("/write")
+    public void writeWithCallback() throws InterruptedException {
+        try {
+            Document doc = new Document().append("t", new Date());
+            this.writeService.performWriteWithCallback(() -> {
+                MongoCollection<Document> collection = mongoClient.getDatabase("demo").getCollection("test");
+                
+                logger.info(collection.insertOne(doc).toString());
+            },(ex) -> {
+                logger.warn("write concern timeout exception for:"+doc);
             });
         } catch (MongoTimeoutException ex) {
             //Server Selection Timeout, default value is 30s. The value can be change by adding urioption or changing client definition.
